@@ -1,0 +1,8 @@
+<% @page_title = "Peer for Player \"#{@player.signifier}\"" %>
+
+<%= @peer.signifier %>
+<%= @peer.resolver.end_point %>
+<%= @peer.resolver.public_key %>
+
+<%= link_to 'Edit', edit_player_peer_path(@player, @peer) %> |
+<%= link_to "Peers for #{@player.signifier}", player_peers_path(@player) %>

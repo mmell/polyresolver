@@ -1,0 +1,13 @@
+<% @page_title = "New Player" %>
+
+<% form_for(@player) do |f| %>
+  <%= f.error_messages %>
+
+	<%= render(:partial => 'form.html.erb', :locals => { :f => f } ) %>
+
+  <label></label>
+    <%= f.submit 'Create' %>
+
+<% end %>
+
+<%= link_to 'List Players', players_path %>

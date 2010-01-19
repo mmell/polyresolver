@@ -1,0 +1,7 @@
+<% @page_title = "#{@transport.transport.titleize} for Player \"#{@player.signifier}\"" %>
+
+<%= @transport.transport %>
+<%= @transport.address %>
+
+<%= link_to 'Edit', edit_player_transport_path(@player, @transport) %> |
+<%= link_to "Transports for #{@player.signifier}", player_transports_path(@player) %>

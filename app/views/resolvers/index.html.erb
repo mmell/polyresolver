@@ -1,0 +1,18 @@
+<h1>Listing resolvers</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% @resolvers.each do |resolver| %>
+  <tr>
+    <td><%= link_to 'Show', resolver %></td>
+    <td><%= link_to 'Edit', edit_resolver_path(resolver) %></td>
+    <td><%= link_to 'Destroy', resolver, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New resolver', new_resolver_path %>

@@ -1,0 +1,12 @@
+<% @page_title = "New Transport for Player \"#{@player.signifier}\"" %>
+
+<% form_for([@player, @transport]) do |f| %>
+  <%= f.error_messages %>
+
+	<%= render(:partial => 'form.html.erb', :locals => { :f => f } ) %>
+	
+  <label></label>
+    <%= f.submit 'Create' %>
+<% end %>
+
+<%= link_to "Transports for #{@player.signifier}", player_transports_path(@player) %>

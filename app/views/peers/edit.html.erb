@@ -1,0 +1,14 @@
+<% @page_title = "Editing Peer for Player \"#{@player.signifier}\"" %>
+
+<% form_for([@player, @peer]) do |f| %>
+  <%= f.error_messages %>
+
+	<%= render(:partial => 'form.html.erb', :locals => { :f => f } ) %>
+
+  <label></label>
+    <%= f.submit 'Update' %>
+
+<% end %>
+
+<%= link_to 'Show', player_peer_path(@player, @peer) %> |
+<%= link_to "Peers for #{@player.signifier}", player_peers_path(@player) %>

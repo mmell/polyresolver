@@ -1,0 +1,14 @@
+<% @page_title = "Editing #{@player.signifier}" %>
+
+<% form_for(@player) do |f| %>
+  <%= f.error_messages %>
+
+  <%= render(:partial => 'form.html.erb', :locals => { :f => f } ) %>
+
+  <label></label>
+    <%= f.submit 'Update' %>
+
+<% end %>
+
+<%= link_to 'Show', @player %> |
+<%= link_to 'List Players', players_path %>

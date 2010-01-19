@@ -1,0 +1,12 @@
+form fieldset { -moz-border-radius: 3px; border: 1px solid  #aca; }
+form fieldset legend { padding: 10px 8px 12px 8px; font-size: 14px; font-weight: bold; color: #336699; }
+form label {
+  float: left;
+  clear: both;
+  width: 160px;
+  margin-right: 0.5em;
+  padding-top: 0.2em;
+  text-align: right;
+  font-weight: bold;
+}
+form label.optional {   font-weight: normal; }

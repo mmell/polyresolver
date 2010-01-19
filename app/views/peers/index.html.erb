@@ -1,0 +1,18 @@
+<% @page_title = "Listing Peers for Player \"#{@player.signifier}\"" %>
+
+<table>
+  <tr>
+  </tr>
+
+<% @peers.each do |peer| %>
+  <tr class='row<%= cycle(1,2) %>'>
+    <td><%= link_to peer.signifier, player_peer_path(@player, peer) %></td>
+    <td><%= link_to 'Edit', edit_player_peer_path(@player, peer) %></td>
+    <td><%= link_to 'Destroy', player_peer_path(@player, peer), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New peer', new_player_peer_path(@player) %>

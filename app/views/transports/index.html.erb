@@ -1,0 +1,19 @@
+<% @page_title = "Listing Transports for Player \"#{@player.signifier}\"" %>
+
+<table>
+  <tr>
+  </tr>
+
+<% @transports.each do |transport| %>
+  <tr class='row<%= cycle(1,2) %>'>
+    <td><%= transport.transport.titleize %></td>
+    <td><%= link_to transport.address, player_transport_path(@player, transport) %></td>
+    <td><%= link_to 'Edit', edit_player_transport_path(@player, transport) %></td>
+    <td><%= link_to 'Destroy', player_transport_path(@player, transport), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New transport', new_player_transport_path(@player) %>

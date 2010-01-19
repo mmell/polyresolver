@@ -1,0 +1,25 @@
+# this system manages resolution for this single Community
+
+# Federation
+parent_communities # this Community is known to the Federating (parent) Community as this local_resolution_id/identifier
+  parent_resolution_id,   :string
+  local_resolution_id,  :string  # This Community's res id in the parent context e.g. asdf.1234
+  identifier,  :string  # This Community's identifier in the parent context e.g. CommunityA
+  resolution_url,  :string  # url to do resolution at the parent
+  
+child_communities # this Community Federates these child communities
+  local_resolution_id,  :string
+  identifier,  :string
+  resolution_url,  :string  # url to do next step of resolution
+
+# Community Members
+members 
+  local_resolution_id,  :string  # the member's local res id in the Community context
+  identifier,  :string  # a resolvable string in the Community context
+
+friends
+  member_id,  :integer  # the authority that knows this cid
+  resolution_id,  :string # the full parent.community.community_resolution_id when resolved in this Community context
+  identifier,  :string  # the authority's nickname for this
+
+If we do not want to allow identifier aliases then we could remove the res id everywhere

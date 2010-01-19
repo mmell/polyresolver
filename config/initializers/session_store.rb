@@ -6,7 +6,8 @@
 # no regular words or you'll be exposed to dictionary attacks.
 ActionController::Base.session = {
   :key         => '_polyresolver_session',
-  :secret      => '5c682440976dfb75863b953b3392f4fd7e4ae8295adce9f11ecb89f774f069d2c2ced4277ce8edf77dafb2837203841a6f8566d37761c6c2f8000edeef9973c9'
+  :expire_after => 2.hours,
+  :secret      => '775363f3f99cb165b327b503ef71b1deaf212aeb90491aa9308c0810aa86e4edc1fb7470483ee6438b88134e30254b6e6792707d5c90af2b2e1c140d8fa36d63'
 }
 
 # Use the database for sessions instead of the cookie-based default,

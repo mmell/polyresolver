@@ -1,4 +1,15 @@
 ActionController::Routing::Routes.draw do |map|
+  
+  map.root :controller => :players
+  
+  map.resources :resolvers
+
+  map.resources :peers
+
+  map.resources :transports
+
+  map.resources :players, :has_many => [:transports, :peers]
+  
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -37,7 +48,13 @@ ActionController::Routing::Routes.draw do |map|
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
-  # consider removing the them or commenting them out if you're using named routes and resources.
+  # consider removing or commenting them out if you're using named routes and resources.
+  
+  map.get_peer 'resolve/:id', :controller => 'resolvers', :action => 'resolve', :requirements => { :id => /.*/ }
+
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
+
+  map.connect ':action', :controller => :main
+
 end

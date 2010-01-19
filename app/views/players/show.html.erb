@@ -1,0 +1,10 @@
+<% @page_title = "Player: #{@player.signifier}" %>
+
+Peer Url: <%= get_peer_url(:id => @player.community_signifier, :only_path => false ) %><br />
+<p>Give your Peer Url to others.</p>
+
+
+<%= link_to 'Transports', player_transports_path(@player) %> |
+<%= link_to 'Peers', player_peers_path(@player) %> |
+<%= link_to 'Edit', edit_player_path(@player) %> |
+<%= link_to 'List Players', players_path %>
