@@ -3,7 +3,7 @@
 <% form_for([@player, @peer]) do |f| %>
   <%= f.error_messages %>
 
-	<%= render(:partial => 'form.html.erb', :locals => { :f => f } ) %>
+	<label>Peer Url</label> <%= text_field_tag(:peer_url, params[:peer_url], { :size => 48 } ) %><br />
 
   <label></label>
     <%= f.submit 'Create' %>
