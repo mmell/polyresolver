@@ -1,5 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
   
+  map.get_peer 'resolvers/resolve/:id', :controller => :resolvers, :action => :resolve, :requirements => { :id => /.*/ } 
+    # requirements allows dots in community signifier
+
   map.root :controller => :players
   
   map.resources :resolvers
@@ -50,8 +53,6 @@ ActionController::Routing::Routes.draw do |map|
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
   
-  map.get_peer 'resolve/:id', :controller => 'resolvers', :action => 'resolve', :requirements => { :id => /.*/ }
-
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 

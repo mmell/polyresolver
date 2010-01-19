@@ -51,8 +51,7 @@ class PeersController < ApplicationController
   # POST /peers
   # POST /peers.xml
   def create
-    signifier, resolver = Peer.resolver_from_peer_url(params[:peer_url] )
-    @peer = @player.peers.create( :signifier => signifier, :resolver => resolver )
+    @peer = @player.peer_from_peer_url(params[:peer_url] )
 
     respond_to do |format|
       if @peer.save

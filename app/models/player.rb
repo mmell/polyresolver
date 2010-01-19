@@ -20,6 +20,8 @@ class Player < ActiveRecord::Base
   validates_presence_of :signifier
   validates_uniqueness_of :signifier, :scope => :community_id
   validates_format_of :signifier, :with => /[a-z\-]/
+
+  validates_uniqueness_of :public_key
   validates_length_of :public_key_prefix, :maximum => 256
   validates_length_of :public_key_prefix, :minimum => 255
   
@@ -61,6 +63,34 @@ class Player < ActiveRecord::Base
     self.community_chain.join(SignifierSep)
   end
   
+  def peer_from_peer_url( peer_url )
+    uri_parsed = URI.parse( peer_url )
+    key_response = UriLib.get( uri_parsed )
+    return false unless key_response.code == '200'
+
+    signifier, uri_parsed = Player.pop_uri_peer(uri_parsed)
+    unused, uri_parsed = Player.pop_uri_path(uri_parsed)
+    if resolver = Resolver.find_by_public_key(key_response.body) 
+      resolver.update_attributes( :end_point => uri_parsed.to_s ) # note: updating record for ALL players
+    else
+      resolver = Resolver.create!( :end_point => uri_parsed.to_s, :public_key => key_response.body ) 
+    end
+    self.peers.build( :signifier => signifier, :resolver => resolver )
+  end
+  
+  def self.pop_uri_path(uri_parsed)
+    paths = uri_parsed.path.split('/')
+    p = paths.pop
+    uri_parsed.path = paths.join('/')
+    [p, uri_parsed]
+  end
+  
+  def self.pop_uri_peer(uri_parsed)
+    signifier, uri_parsed = pop_uri_path(uri_parsed)
+    signifier = signifier.split(Player::SignifierSep).pop
+    [signifier, uri_parsed]
+  end
+
   def self.find_by_signifier(s)
     parent_community_id, player = nil, nil
     s.split(SignifierSep).reverse.each { |e|

@@ -29,10 +29,11 @@ config.action_mailer.delivery_method = :test
 
 config.gem "factory_girl", :source => "http://gemcutter.org"
 
-DevPlayerEndPoint = 'http://localhost:3010'
+DevPlayerEndPoint = 'http://0.0.0.0:3010' # using localhost gives me redirects
   # this comes from the dev db, used to test RPC. run rake db:seeds in dev
+DevPlayerEmail = 'devplayer@example.com'
 DevPlayer = { 
-  :signifier => 'testplayer',
+  :signifier => 'devplayer',
   :public_key => %Q{-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD1RvN92Ztb3J/h7fvdxffqqjyY
 IX8E3Tej3uE9SDpXSuxQKqhLn6QSarmbiDO7opvAcQFsITQinR4kcnn4KFOS1JR3

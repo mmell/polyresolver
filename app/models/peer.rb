@@ -22,24 +22,11 @@ class Peer < ActiveRecord::Base
     self.signifier = "#{base}#{ix}"
   end
   
-  def self.resolver_from_peer_url( peer_url )
-    uri_parsed = URI.parse( peer_url )
-    key_response = UriLib.get( uri_parsed )
-    return false unless key_response.code == '200'
-
-    resolver = Resolver.find_by_public_key(key_response.body)
-    signifier, uri_parsed = split_peer_url(uri_parsed)
-    resolver = Resolver.new if !resolver
-    resolver.update_attributes(:end_point => uri_parsed.to_s, :public_key => key_response.body )
-    [signifier, resolver]
-  end
-  
-  def self.split_peer_url(uri_parsed)
-    paths = uri_parsed.path.split('/')
-    signifier = paths.pop
-    signifier = signifier.split(Player::SignifierSep).pop
-    uri_parsed.path = paths.join('/')
-    [signifier, uri_parsed]
+  def get_transport(transport_method)
+    uri_parsed = URI.parse(self.resolver.end_point + "/transport")
+    payload = "transport=#{CGI::escape(transport_method)}&public_key=#{CGI::escape(self.resolver.public_key)}"
+    response = UriLib.post( uri_parsed, payload, {}, false )
+    (response.code == '200' ? response.body : nil)
   end
   
 end

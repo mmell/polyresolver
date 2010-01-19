@@ -1,3 +1,4 @@
 Player.create(:signifier => 'host')
-tp = Player.create(:signifier => 'devplayer')
-puts "DevPlayer is #{tp.inspect}"
+player = Player.create(:signifier => 'devplayer')
+puts "DevPlayer is #{player.inspect}"
+Player.find_by_signifier('devplayer').transports.create(:transport => 'email', :address => DevPlayerEmail )

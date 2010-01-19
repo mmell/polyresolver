@@ -15,7 +15,6 @@ module UriLib
 
   def self.get(uri_parsed, redirect_limit = 0, opts = {})
     opts[:time_out] ||= 10
-    raise ArgumentError, 'HTTP redirects exceeded limit' if redirect_limit == 0
     uri_parsed.path = '/' if uri_parsed.path.empty?
     uri_parsed.path << ('?' + uri_parsed.query) unless uri_parsed.query.nil?
     site = Net::HTTP.new(uri_parsed.host, uri_parsed.port)
@@ -25,6 +24,7 @@ module UriLib
     if response.code == '200'
       response
     elsif ['301', '302', '303', '305', '307'].include?( response.code)
+      raise RuntimeError, 'HTTP redirects exceeded limit' if redirect_limit < 1
       get(response['location'], redirect_limit - 1, opts)
     else
       response.error!

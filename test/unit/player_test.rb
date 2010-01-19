@@ -20,16 +20,21 @@ class PlayerTest < ActiveSupport::TestCase
 
   test "players transports" do
     p = Player.create!(Factory.attributes_for(:player))
-    assert(p.valid?)
     t = Transport.create!(:transport => 'email', :address => Factory.next(:email), :player => p )
     assert_equal( t, p.transports(true).first)
   end
   
   test "players transport" do
     p = Factory.create(:player)
-    assert(p.valid?)
     assert_difference("Player.find(p.id).transports.count") {
       Transport.create(:transport => 'email', :address => 'mike@nthwave.net', :player => p )
+    }
+  end
+  
+  test "players transports create" do
+    p = Factory.create(:player)
+    assert_difference("Player.find(p.id).transports.count") {
+      p.transports.create(:transport => 'email', :address => 'mike@nthwave.net' )
     }
   end
   
@@ -76,4 +81,25 @@ class PlayerTest < ActiveSupport::TestCase
     assert_equal(p2, Player.find_by_signifier( p2.community_signifier ) )
   end
   
+  test "Player pop_uri_peer" do
+    uri_parsed = URI.parse( 'http://0.0.0.0:3011/resolve/mikey' )
+    result = Player.pop_uri_peer(uri_parsed)
+    assert_equal('mikey', result[0])
+    assert_equal(URI.parse( 'http://0.0.0.0:3011/resolve' ).to_s, result[1].to_s)
+
+    uri_parsed = URI.parse( 'http://0.0.0.0:3011/resolve/mikey.owen' )
+    result = Player.pop_uri_peer(uri_parsed)
+    assert_equal('owen', result[0])
+    assert_equal(URI.parse( 'http://0.0.0.0:3011/resolve' ).to_s, result[1].to_s)
+  end
+  
+  test "peer_from_peer_url" do
+    p = Factory.create(:player)
+    peer_url = "#{DevPlayerEndPoint}/resolvers/resolve/#{DevPlayer[:signifier]}"
+    assert_difference("Resolver.count") {
+      assert_difference("Peer.count") {
+        p.peer_from_peer_url( peer_url ).save!
+      }
+    }
+  end
 end
