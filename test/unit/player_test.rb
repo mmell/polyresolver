@@ -18,6 +18,19 @@ class PlayerTest < ActiveSupport::TestCase
     assert_equal(0, p.public_key.index(p.public_key_prefix) )
   end
 
+  test "players resolver" do
+    p = Factory.create(:player)
+    assert_difference("Resolver.count") {
+    }
+  end
+  
+  test "players transports create" do
+    p = Factory.create(:player)
+    assert_difference("Player.find(p.id).transports.count") {
+      p.transports.create(:transport => 'email', :address => 'mike@nthwave.net' )
+    }
+  end
+    
   test "players transports" do
     p = Player.create!(Factory.attributes_for(:player))
     t = Transport.create!(:transport => 'email', :address => Factory.next(:email), :player => p )
@@ -37,24 +50,7 @@ class PlayerTest < ActiveSupport::TestCase
       p.transports.create(:transport => 'email', :address => 'mike@nthwave.net' )
     }
   end
-  
-  test "players members" do
-    p1 = Factory.create(:player)
-    assert(p1.valid?)
-    assert_difference("Player.find(p1.id).members.count") {
-      p2 = Factory.create(:player, :community_id => p1.id )
-      assert(p2.valid?)
-    }
-  end
-  
-  test "destroys members" do
-    p = Factory.create(:player)
-    p2 = Factory.create(:player, :community_id => p.id )
-    assert_nothing_raised(ActiveRecord::RecordNotFound) { Player.find(p2.id) }
-    p.destroy
-    assert_raise(ActiveRecord::RecordNotFound) { Player.find(p2.id) }
-  end
-  
+    
   test "players peers" do
     p = Factory.create(:player)
     assert_difference("Resolver.count") {
@@ -62,23 +58,6 @@ class PlayerTest < ActiveSupport::TestCase
         Factory.create(:peer, :player => p, :resolver => Factory.create(:resolver, :public_key => DevPlayer[:public_key]) )
       }
     }
-  end
-    
-  test "community_chain and community_signifier" do
-    p1 = Factory.create(:player)
-    assert_equal([p1.signifier], p1.community_chain)
-    assert_equal(p1.signifier, p1.community_signifier)
-
-    p2 = Factory.create(:player, :community => p1)
-    assert_equal([p2.signifier, p1.signifier], p2.community_chain)
-    assert_equal([p2.signifier, p1.signifier].join(Player::SignifierSep), p2.community_signifier)
-  end
-  
-  test "class_find_by_signifier" do
-    p1 = Factory.create(:player)
-    p2 = Factory.create(:player, :community_id => p1.id)
-    
-    assert_equal(p2, Player.find_by_signifier( p2.community_signifier ) )
   end
   
   test "Player pop_uri_peer" do

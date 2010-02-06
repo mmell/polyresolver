@@ -1,9 +1,17 @@
 require 'test_helper'
 
 class ResolversControllerTest < ActionController::TestCase
+  
+  test "class_resolve" do
+    player = Factory.create(:player)
+    get :resolve, { :id => player.signifier }
+    assert_response :success
+    assert_equal(player.public_key, @response.body)
+  end
+  
   test "resolve should get public key" do
     player = Factory.create(:player)
-    get :resolve, { :id => player.community_signifier }
+    get :resolve, { :id => player.signifier }
     assert_response :success
     assert_equal(player.public_key, @response.body)
   end

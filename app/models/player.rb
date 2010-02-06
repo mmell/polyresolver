@@ -7,27 +7,23 @@ class Player < ActiveRecord::Base
   SignifierSep = '.'
   
 # this makes testing harder  attr_protected :public_key, :private_key
-  
-  belongs_to :community, :class_name => "Player"
 
-  has_many :members, :dependent => :destroy, :class_name => "Player", :foreign_key => :community_id
   has_many :peers, :dependent => :destroy
   
   has_many :transports, :dependent => :destroy
   
-  validates_associated :community # allows nil
-
+  validates_uniqueness_of :signifier
   validates_presence_of :signifier
-  validates_uniqueness_of :signifier, :scope => :community_id
-  validates_format_of :signifier, :with => /[a-z\-]/
+  validates_format_of :signifier, :with => /[a-z0-9\-]/
 
   validates_uniqueness_of :public_key
   validates_length_of :public_key_prefix, :maximum => 256
   validates_length_of :public_key_prefix, :minimum => 255
   
-  before_validation_on_create [:generate_keypair, :sync_public_key_prefix, :downcase_signifier]
+  before_validation_on_create [:generate_keypair, :sync_public_key_prefix, :normalize_signifier]
 
-  def downcase_signifier
+  def normalize_signifier
+    self.signifier = Digest::MD5.hexdigest( public_key ) if self.signifier.blank?
     self.signifier = self.signifier.downcase # not sure what effect this has on non-english strings
   end
   
@@ -43,26 +39,13 @@ class Player < ActiveRecord::Base
   end
   
   def generate_keypair
-#    raise StandardError, self.inspect if self.public_key.nil?
     if self.public_key.nil?
       hsh = Player.generate_keypair
       self.public_key = hsh[:public_key]
       self.private_key = hsh[:private_key]
     end
   end
-  
-  def community_chain( chain = [] )
-    chain << self.signifier
-    if self.community_id?
-      self.community.community_chain(chain)
-    end
-    chain
-  end
-  
-  def community_signifier
-    self.community_chain.join(SignifierSep)
-  end
-  
+    
   def peer_from_peer_url( peer_url )
     uri_parsed = URI.parse( peer_url )
     key_response = UriLib.get( uri_parsed )
@@ -91,20 +74,6 @@ class Player < ActiveRecord::Base
     [signifier, uri_parsed]
   end
 
-  def self.find_by_signifier(s)
-    parent_community_id, player = nil, nil
-    s.split(SignifierSep).reverse.each { |e|
-      if parent_community_id
-        player = Player.find(:first, :conditions => ["signifier = ? and community_id = #{parent_community_id}", e])
-      else
-        player = Player.find(:first, :conditions => ["signifier = ?", e])
-      end
-      return nil unless player
-      parent_community_id = player.id
-    }
-    player
-  end
-  
   def self.generate_keypair
     tmp_path = "#{RAILS_ROOT}/tmp/#{OpenSSL::Digest::MD5.hexdigest( rand(Time.new.to_f).to_s ).upcase}" 
     #    pri = `openssl genrsa 1024`

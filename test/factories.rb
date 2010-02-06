@@ -7,7 +7,7 @@ Factory.sequence :email do |n|
 end
 
 Factory.define :player do |f|
-  f.signifier { Factory.next(:signifier) }
+#  f.signifier { Factory.next(:signifier) }
 end
 
 Factory.define :resolver do |f|

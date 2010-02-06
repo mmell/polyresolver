@@ -1,10 +1,25 @@
 class ResolversController < ApplicationController
   protect_from_forgery :only => [] # turn it off here
   
-  # convert a community signifier into a public key
+  def self.peer_resolver_url(peer)
+    "#{peer.resolver.end_point}/resolve/#{peer.signifier}"
+  end
+
   def resolve
-    player = Player.find_by_signifier(params[:id])
+    player_signifier, *peer_signifiers = params[:id].split(Player::SignifierSep)
+    player = Player.find(:first, :conditions => ["signifier = ?", player_signifier])
+
     render(:text => 'Player not found', :layout => false, :status => :unprocessable_entity) and return unless player
+
+    unless peer_signifiers.empty?
+      peer = player.peer.find_by_signifier(peer_signifiers.shift)
+      render(:text => 'Player not found', :layout => false, :status => :unprocessable_entity) and return unless peer
+      peer_signifiers.each { |e|
+        Player.peer_resolver_url(peer)
+        p = Player.find(:first, :conditions => ["signifier = ?", e])
+      }
+    end
+
     render(:text => player.public_key, :layout => false)
   end
   

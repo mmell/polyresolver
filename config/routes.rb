@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   
   map.get_peer 'resolvers/resolve/:id', :controller => :resolvers, :action => :resolve, :requirements => { :id => /.*/ } 
-    # requirements allows dots in community signifier
+    # requirements allows dots in chained signifiers
 
   map.root :controller => :players
   

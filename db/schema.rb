@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100116214630) do
+ActiveRecord::Schema.define(:version => 20100206193045) do
 
   create_table "peers", :force => true do |t|
     t.integer  "player_id"
@@ -24,7 +24,6 @@ ActiveRecord::Schema.define(:version => 20100116214630) do
   add_index "peers", ["signifier"], :name => "signifier_index"
 
   create_table "players", :force => true do |t|
-    t.integer  "community_id"
     t.string   "signifier"
     t.text     "public_key"
     t.text     "private_key"
@@ -33,7 +32,6 @@ ActiveRecord::Schema.define(:version => 20100116214630) do
     t.datetime "updated_at"
   end
 
-  add_index "players", ["community_id"], :name => "community_index"
   add_index "players", ["public_key_prefix"], :name => "public_key_prefix_index"
   add_index "players", ["signifier"], :name => "signifier_index", :unique => true
 
