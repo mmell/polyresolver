@@ -17,20 +17,7 @@ class PlayerTest < ActiveSupport::TestCase
     p = Player.create(:signifier => 'mike')
     assert_equal(0, p.public_key.index(p.public_key_prefix) )
   end
-
-  test "players resolver" do
-    p = Factory.create(:player)
-    assert_difference("Resolver.count") {
-    }
-  end
-  
-  test "players transports create" do
-    p = Factory.create(:player)
-    assert_difference("Player.find(p.id).transports.count") {
-      p.transports.create(:transport => 'email', :address => 'mike@nthwave.net' )
-    }
-  end
-    
+      
   test "players transports" do
     p = Player.create!(Factory.attributes_for(:player))
     t = Transport.create!(:transport => 'email', :address => Factory.next(:email), :player => p )

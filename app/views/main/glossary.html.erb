@@ -7,10 +7,10 @@
 		<dd>A Player discovers and interacts with other Players through their Peer records.</dd>
 	<dt>Player (Model)</dt>
 		<dd>A Player is an agent rooted in the local server. May be human, animal, mineral or automaton.</dd>
+	<dt>Resolution (Process)</dt>
+		<dd>Gets the public key from a Peer Url (e.g. <%= get_peer_url(:id => Player.first.signifier, :only_path => false ) %>).</dd>
 	<dt>Resolver (Model)</dt>
 		<dd>Resolver records record the Global Id and resolution end point of Peers.</dd>
 	<dt>Transport (Model)</dt>
 		<dd>Transport addresses belong to Players and are discoverable by Peers. They are the functioning addresses from other schemes, for example: email, web, telephone, carrier pigeon.</dd>
-	<dt>Resolution (a process)</dt>
-		<dd>Gets the public key from a Peer Url (e.g. <%= get_peer_url(:id => Player.first.signifier, :only_path => false ) %>).</dd>
 </dl>

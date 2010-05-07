@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class PlayersControllerTest < ActionController::TestCase
+=begin
   test "should get index" do
     get :index
     assert_response :success
@@ -42,4 +43,5 @@ class PlayersControllerTest < ActionController::TestCase
 
     assert_redirected_to players_path
   end
+=end
 end
