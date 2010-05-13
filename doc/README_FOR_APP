@@ -1,2 +1,6 @@
-Use this README file to introduce your application and point to useful places in the API for learning more.
-Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+INSTALL
+Required external depedencies:
+
+Vendor/Plugins/AtLinksafe
+svn co https://linksafe.svn.sourceforge.net/svnroot/linksafe/rails/ibroker/trunk/vendor/plugins/at_linksafe vendor/plugins/at_linksafe
+ruby vendor/plugins/at_linksafe/install.rb
